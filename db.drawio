@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.5.2" pages="2">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 OPR/127.0.0.0" version="29.2.1" pages="2">
   <diagram name="Página-1" id="UrETvu0mGGvCEG__eDpr">
-    <mxGraphModel dx="1181" dy="651" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -164,11 +164,17 @@
         <mxCell id="jPesf1uKM1HvqFKTjHoc-12" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;div&gt;encode password sha256 with some salt password&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;user name must be unique (inside tenant)&lt;/div&gt;" vertex="1">
           <mxGeometry height="100" width="180" x="620" y="850" as="geometry" />
         </mxCell>
+        <mxCell id="WpBRptYRKiYoO7ge5eT0-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="adicionar infos de pagamento" vertex="1">
+          <mxGeometry height="30" width="150" x="325" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="-8Lj7H-jSPrZid-iONpm-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="adicionar infos de entrega" vertex="1">
+          <mxGeometry height="30" width="90" x="355" y="240" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="HkvatOkNaS3XC1dkZN-p" name="Página-2">
-    <mxGraphModel dx="984" dy="542" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -198,6 +204,36 @@
         </mxCell>
         <mxCell id="cd2DA0SD11wUeAjWPxhi-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="tenat: lavação" vertex="1">
           <mxGeometry height="30" width="60" x="555" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="4yp8rcfHR62iDvQFcXVO-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Da uma usadinha" vertex="1">
+          <mxGeometry height="120" width="260" x="270" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="4yp8rcfHR62iDvQFcXVO-2" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Abrir venda" vertex="1">
+          <mxGeometry height="80" width="120" x="180" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="4yp8rcfHR62iDvQFcXVO-3" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Adicionar/Remover produto à venda" vertex="1">
+          <mxGeometry height="80" width="120" x="330" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="4yp8rcfHR62iDvQFcXVO-4" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Pagar" vertex="1">
+          <mxGeometry height="80" width="120" x="470" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="4yp8rcfHR62iDvQFcXVO-5" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Fechar venda" vertex="1">
+          <mxGeometry height="80" width="120" x="180" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="4yp8rcfHR62iDvQFcXVO-6" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Cadastrar Produto" vertex="1">
+          <mxGeometry height="80" width="120" x="330" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="4yp8rcfHR62iDvQFcXVO-7" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Adicionar/Retirar Estoque" vertex="1">
+          <mxGeometry height="80" width="120" x="470" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="WA5tpAXSk7dF6cKmhxbs-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Consultar Historico" vertex="1">
+          <mxGeometry height="80" width="120" x="180" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="l4RNgSZ47Xj2KkQFYfZ1-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Simular Entrega" vertex="1">
+          <mxGeometry height="80" width="120" x="330" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="l4RNgSZ47Xj2KkQFYfZ1-2" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Consultar Entrega" vertex="1">
+          <mxGeometry height="80" width="120" x="480" y="740" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
