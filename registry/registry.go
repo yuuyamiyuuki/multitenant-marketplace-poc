@@ -21,3 +21,9 @@ func (r *Registry) NewProductController() *controller.ProductController {
 	svc := service.NewProductService(repo)
 	return controller.NewProductController(svc)
 }
+
+func (r *Registry) NewUserController() *controller.UserController {
+	repo := repository.NewUserRepository(r.db)
+	svc := service.NewUserService(repo)
+	return controller.NewUserController(svc)
+}

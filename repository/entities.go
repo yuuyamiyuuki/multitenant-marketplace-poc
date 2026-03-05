@@ -10,9 +10,8 @@ import (
 type Tenant struct {
 	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Name      string
-	Settings  datatypes.JSON
-	Birthday  time.Time
-	APIKey    datatypes.JSON
+	Settings  datatypes.JSON `json:"settings" swaggertype:"object"`
+	APIKey    uuid.UUID
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Users     []User
@@ -47,6 +46,8 @@ type Product struct {
 	Price     float64
 	Stock     int
 	Tags      datatypes.JSON `json:"tags" swaggertype:"string"`
+	TenantID  uuid.UUID
+	Tenant    Tenant
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -55,7 +56,7 @@ type Sale struct {
 	ID          uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Date        time.Time
 	TotalAmount float64
-	Details     datatypes.JSON
+	Details     datatypes.JSON `json:"details" swaggertype:"object"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	TenantID    uuid.UUID

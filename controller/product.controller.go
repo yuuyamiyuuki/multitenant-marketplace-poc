@@ -33,13 +33,15 @@ func NewProductController(service service.ProductService) *ProductController {
 // @Router       /api/v1/products/ [post]
 func (h *ProductController) CreateProduct(c *gin.Context) {
 	var input dto.CreateProductInput
+	tenantParam := c.GetString("tenant_id")
+	tenantID, err := uuid.Parse(tenantParam)
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		_ = c.Error(middleware.NewBadRequest("invalid request payload", err))
 		return
 	}
 
-	createdProduct, err := h.productService.CreateProduct(input)
+	createdProduct, err := h.productService.CreateProduct(input, tenantID)
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -50,14 +52,16 @@ func (h *ProductController) CreateProduct(c *gin.Context) {
 
 func (h *ProductController) GetProduct(c *gin.Context) {
 	idParam := c.Param("id")
-
+	tenantParam := c.GetString("tenant_id")
+	tenantID, err := uuid.Parse(tenantParam)
 	productID, err := uuid.Parse(idParam)
+
 	if err != nil {
-		_ = c.Error(middleware.NewBadRequest("invalid UUID format provided", err))
+		_ = c.Error(middleware.NewBadRequest("invalid UUID format", err))
 		return
 	}
 
-	product, err := h.productService.GetProduct(productID)
+	product, err := h.productService.GetProduct(productID, tenantID)
 	if err != nil {
 		_ = c.Error(err)
 		return
@@ -65,11 +69,10 @@ func (h *ProductController) GetProduct(c *gin.Context) {
 
 	c.JSON(http.StatusOK, product)
 }
-
 func (h *ProductController) RegisterRoutes(router *gin.RouterGroup) {
 	products := router.Group("/products")
 	{
-		products.POST("/", h.CreateProduct)
-		products.GET("/:id", h.GetProduct)
+		products.POST("/", middleware.RequireAuth("admin"), h.CreateProduct)
+		products.GET("/:id", middleware.RequireAuth("admin", "customer"), h.GetProduct)
 	}
 }

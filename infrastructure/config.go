@@ -8,9 +8,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var App *AppConfig
+
 type AppConfig struct {
 	DatabaseDSN string
 	ServerPort  string
+	JWTSecret   string
 }
 
 func ConfigLoad() *AppConfig {
@@ -34,10 +37,15 @@ func ConfigLoad() *AppConfig {
 		port = "8080"
 	}
 
+	jwtSecret := os.Getenv("JWT_SECRET")
+
 	log.Println("Environment variables loaded successfully")
 
-	return &AppConfig{
+	App = &AppConfig{
 		DatabaseDSN: dsn,
 		ServerPort:  port,
+		JWTSecret:   jwtSecret,
 	}
+
+	return App
 }

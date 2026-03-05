@@ -2,26 +2,27 @@ package repository
 
 import (
 	"errors"
+
 	"gorm.io/gorm"
 )
 
 type UserRepository interface {
-	BaseRepository[*User]
-
+	BaseRepository[User]
 	FindByUsername(username string) (*User, error)
 }
 
 type userRepository struct {
-	BaseRepository[*User]
+	BaseRepository[User]
 	db *gorm.DB
 }
 
 func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{
-		BaseRepository: NewBaseRepository[*User](db),
+		BaseRepository: NewBaseRepository[User](db),
 		db:             db,
 	}
 }
+
 func (repo *userRepository) FindByUsername(username string) (*User, error) {
 	var user User
 

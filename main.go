@@ -20,6 +20,10 @@ import (
 // @description     A Proof of Concept API for multitenant e-commerce.
 // @host            localhost:8080
 // @BasePath        /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Bearer token .
 func main() {
 	cfg := infrastructure.ConfigLoad()
 	db := infrastructure.ConnectDB(cfg.DatabaseDSN)
@@ -32,8 +36,12 @@ func main() {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	api := r.Group("/api/v1")
+
 	productCtrl := reg.NewProductController()
 	productCtrl.RegisterRoutes(api)
+
+	userCtrl := reg.NewUserController()
+	userCtrl.RegisterRoutes(api)
 
 	log.Printf("Starting server on port %s...", cfg.ServerPort)
 	if err := r.Run(":" + cfg.ServerPort); err != nil {

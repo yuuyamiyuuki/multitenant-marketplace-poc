@@ -13,9 +13,72 @@ definitions:
     - name
     - price
     type: object
+  dto.CreateUserInput:
+    properties:
+      password:
+        minLength: 6
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - role
+    - username
+    type: object
+  dto.LoginInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  dto.LoginResponse:
+    properties:
+      expires_at:
+        type: string
+      token:
+        type: string
+    type: object
+  dto.UpdatePasswordInput:
+    properties:
+      new_password:
+        minLength: 6
+        type: string
+      old_password:
+        type: string
+    required:
+    - new_password
+    - old_password
+    type: object
   middleware.AppError:
     properties:
       message:
+        type: string
+    type: object
+  repository.Client:
+    properties:
+      birthday:
+        type: string
+      createdAt:
+        type: string
+      document:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      sales:
+        items:
+          $ref: '#/definitions/repository.Sale'
+        type: array
+      updatedAt:
         type: string
     type: object
   repository.Product:
@@ -33,7 +96,99 @@ definitions:
         type: integer
       tags:
         type: string
+      tenant:
+        $ref: '#/definitions/repository.Tenant'
+      tenantID:
+        type: string
       updatedAt:
+        type: string
+    type: object
+  repository.Sale:
+    properties:
+      client:
+        $ref: '#/definitions/repository.Client'
+      clientID:
+        type: string
+      createdAt:
+        type: string
+      date:
+        type: string
+      details:
+        type: object
+      id:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/repository.SaleItem'
+        type: array
+      tenant:
+        $ref: '#/definitions/repository.Tenant'
+      tenantID:
+        type: string
+      totalAmount:
+        format: float64
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  repository.SaleItem:
+    properties:
+      amount:
+        format: float64
+        type: number
+      id:
+        type: string
+      product:
+        $ref: '#/definitions/repository.Product'
+      productID:
+        type: string
+      quantity:
+        type: integer
+      sale:
+        $ref: '#/definitions/repository.Sale'
+      saleID:
+        type: string
+    type: object
+  repository.Tenant:
+    properties:
+      apikey:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      sales:
+        items:
+          $ref: '#/definitions/repository.Sale'
+        type: array
+      settings:
+        type: object
+      updatedAt:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/repository.User'
+        type: array
+    type: object
+  repository.User:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      tenant:
+        $ref: '#/definitions/repository.Tenant'
+      tenantID:
+        type: string
+      updatedAt:
+        type: string
+      username:
         type: string
     type: object
 host: localhost:8080
@@ -69,4 +224,123 @@ paths:
       summary: Create a new product
       tags:
       - products
+  /api/v1/users/:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new tenant user. Requires admin privileges.
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+      security:
+      - BearerAuth: []
+      summary: Create a new user
+      tags:
+      - users
+  /api/v1/users/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns a JWT token.
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+      summary: User login
+      tags:
+      - users
+  /api/v1/users/password:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the password for the authenticated user. User ID is extracted
+        from JWT.
+      parameters:
+      - description: Password Data
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePasswordInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+      security:
+      - BearerAuth: []
+      summary: Update current user password
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    description: Bearer token .
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

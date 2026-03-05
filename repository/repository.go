@@ -12,6 +12,7 @@ type BaseRepository[T any] interface {
 	Update(entity *T) error
 	Delete(entity *T) error
 	FindByID(id uuid.UUID) (*T, error)
+	FindByIDAndTenant(id uuid.UUID, tenantID uuid.UUID) (*T, error)
 }
 
 type baseRepository[T any] struct {
@@ -38,6 +39,21 @@ func (repo *baseRepository[T]) FindByID(id uuid.UUID) (*T, error) {
 	var entity T
 
 	result := repo.db.First(&entity, "id = ?", id)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, errors.New("record not found")
+		}
+		return nil, result.Error
+	}
+
+	return &entity, nil
+}
+
+func (repo *baseRepository[T]) FindByIDAndTenant(id uuid.UUID, tenantID uuid.UUID) (*T, error) {
+	var entity T
+
+	result := repo.db.Where("id = ? AND tenant_id = ?", id, tenantID).First(&entity)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {

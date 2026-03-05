@@ -9,8 +9,8 @@ import (
 )
 
 type ProductService interface {
-	CreateProduct(input dto.CreateProductInput) (*repository.Product, error)
-	GetProduct(id uuid.UUID) (*repository.Product, error)
+	CreateProduct(input dto.CreateProductInput, tenantID uuid.UUID) (*repository.Product, error)
+	GetProduct(id uuid.UUID, tenantID uuid.UUID) (*repository.Product, error)
 }
 
 type productService struct {
@@ -23,11 +23,12 @@ func NewProductService(repo repository.ProductRepository) ProductService {
 	}
 }
 
-func (s *productService) CreateProduct(input dto.CreateProductInput) (*repository.Product, error) {
+func (s *productService) CreateProduct(input dto.CreateProductInput, tenantID uuid.UUID) (*repository.Product, error) {
 	newProduct := &repository.Product{
-		Name:  input.Name,
-		Price: input.Price,
-		Stock: input.Stock,
+		TenantID: tenantID,
+		Name:     input.Name,
+		Price:    input.Price,
+		Stock:    input.Stock,
 	}
 
 	err := s.productRepo.Create(newProduct)
@@ -38,8 +39,9 @@ func (s *productService) CreateProduct(input dto.CreateProductInput) (*repositor
 	return newProduct, nil
 }
 
-func (s *productService) GetProduct(id uuid.UUID) (*repository.Product, error) {
-	product, err := s.productRepo.FindByID(id)
+func (s *productService) GetProduct(id uuid.UUID, tenantID uuid.UUID) (*repository.Product, error) {
+
+	product, err := s.productRepo.FindByIDAndTenant(id, tenantID)
 
 	if err != nil {
 		if err.Error() == "record not found" {

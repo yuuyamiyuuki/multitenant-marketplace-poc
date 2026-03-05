@@ -30,3 +30,7 @@ func NewInternal(message string, err error) *AppError {
 func NewConflict(message string, err error) *AppError {
 	return &AppError{Code: 409, Message: message, Err: err}
 }
+
+func NewUnauthorized(message string, err error) *AppError {
+	return &AppError{Code: 401, Message: message, Err: err}
+}
