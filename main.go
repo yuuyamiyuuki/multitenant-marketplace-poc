@@ -3,40 +3,40 @@ package main
 import (
 	"log"
 
-	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-
-	"gin-tenant/controller"
+	"gin-tenant/infrastructure"
 	"gin-tenant/middleware"
-	"gin-tenant/repository"
-	"gin-tenant/service"
+	"gin-tenant/registry"
+
+	"github.com/gin-gonic/gin"
+
+	_ "gin-tenant/docs"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title           Multitenant Marketplace API
+// @version         1.0
+// @description     A Proof of Concept API for multitenant e-commerce.
+// @host            localhost:8080
+// @BasePath        /
 func main() {
-	// TODO use env vars
-	dsn := "host=localhost user=postgres password=postgres dbname=marketplace port=5432 sslmode=disable"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
+	cfg := infrastructure.ConfigLoad()
+	db := infrastructure.ConnectDB(cfg.DatabaseDSN)
+	infrastructure.RunMigrations(db)
 
-	productRepo := repository.NewProductRepository(db)
-	productService := service.NewProductService(productRepo)
-	productController := controller.NewProductController(productService)
+	reg := registry.NewRegistry(db)
 
 	r := gin.Default()
-
 	r.Use(middleware.ErrorHandler())
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	api := r.Group("/api/v1")
-	{
-		api.POST("/products", productController.CreateProduct)
-		api.GET("/products/:id", productController.GetProduct)
-	}
+	productCtrl := reg.NewProductController()
+	productCtrl.RegisterRoutes(api)
 
-	log.Println("Starting server on :8080")
-	if err := r.Run(":8080"); err != nil {
+	log.Printf("Starting server on port %s...", cfg.ServerPort)
+	if err := r.Run(":" + cfg.ServerPort); err != nil {
 		log.Fatalf("Server crashed: %v", err)
 	}
 }

@@ -21,6 +21,16 @@ func NewProductController(service service.ProductService) *ProductController {
 	}
 }
 
+// CreateProduct godoc
+// @Summary      Create a new product
+// @Description  Takes a product JSON payload and saves it to the database
+// @Tags         products
+// @Accept       json
+// @Produce      json
+// @Param        product  body      dto.CreateProductInput  true  "Product Data"
+// @Success      201      {object}  repository.Product
+// @Failure      400      {object}  middleware.AppError
+// @Router       /api/v1/products/ [post]
 func (h *ProductController) CreateProduct(c *gin.Context) {
 	var input dto.CreateProductInput
 
@@ -54,4 +64,12 @@ func (h *ProductController) GetProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, product)
+}
+
+func (h *ProductController) RegisterRoutes(router *gin.RouterGroup) {
+	products := router.Group("/products")
+	{
+		products.POST("/", h.CreateProduct)
+		products.GET("/:id", h.GetProduct)
+	}
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type Tenant struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Name      string
 	Settings  datatypes.JSON
 	Birthday  time.Time
@@ -20,7 +20,7 @@ type Tenant struct {
 }
 
 type User struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Role      string
 	Username  string
 	Password  string
@@ -31,7 +31,7 @@ type User struct {
 }
 
 type Client struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Document  string
 	Phone     string
 	Birthday  time.Time
@@ -42,17 +42,17 @@ type Client struct {
 }
 
 type Product struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Name      string
 	Price     float64
 	Stock     int
-	Tags      datatypes.JSON
+	Tags      datatypes.JSON `json:"tags" swaggertype:"string"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
 type Sale struct {
-	ID          uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	ID          uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Date        time.Time
 	TotalAmount float64
 	Details     datatypes.JSON
@@ -66,7 +66,7 @@ type Sale struct {
 }
 
 type SaleItem struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Quantity  int
 	Amount    float64
 	SaleID    uuid.UUID

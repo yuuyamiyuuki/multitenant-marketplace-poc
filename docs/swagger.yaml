@@ -1,0 +1,72 @@
+basePath: /
+definitions:
+  dto.CreateProductInput:
+    properties:
+      name:
+        type: string
+      price:
+        type: number
+      stock:
+        minimum: 0
+        type: integer
+    required:
+    - name
+    - price
+    type: object
+  middleware.AppError:
+    properties:
+      message:
+        type: string
+    type: object
+  repository.Product:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        format: float64
+        type: number
+      stock:
+        type: integer
+      tags:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: A Proof of Concept API for multitenant e-commerce.
+  title: Multitenant Marketplace API
+  version: "1.0"
+paths:
+  /api/v1/products/:
+    post:
+      consumes:
+      - application/json
+      description: Takes a product JSON payload and saves it to the database
+      parameters:
+      - description: Product Data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProductInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/repository.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.AppError'
+      summary: Create a new product
+      tags:
+      - products
+swagger: "2.0"
