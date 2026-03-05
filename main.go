@@ -1,27 +1,42 @@
 package main
 
 import (
-  "log"
-  "net/http"
+	"log"
 
-  "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+
+	"gin-tenant/controller"
+	"gin-tenant/middleware"
+	"gin-tenant/repository"
+	"gin-tenant/service"
 )
 
 func main() {
-  // Create a Gin router with default middleware (logger and recovery)
-  r := gin.Default()
+	// TODO use env vars
+	dsn := "host=localhost user=postgres password=postgres dbname=marketplace port=5432 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
 
-  // Define a simple GET endpoint
-  r.GET("/ping", func(c *gin.Context) {
-    // Return JSON response
-    c.JSON(http.StatusOK, gin.H{
-      "message": "pong",
-    })
-  })
+	productRepo := repository.NewProductRepository(db)
+	productService := service.NewProductService(productRepo)
+	productController := controller.NewProductController(productService)
 
-  // Start server on port 8080 (default)
-  // Server will listen on 0.0.0.0:8080 (localhost:8080 on Windows)
-  if err := r.Run(); err != nil {
-    log.Fatalf("failed to run server: %v", err)
-  }
+	r := gin.Default()
+
+	r.Use(middleware.ErrorHandler())
+
+	api := r.Group("/api/v1")
+	{
+		api.POST("/products", productController.CreateProduct)
+		api.GET("/products/:id", productController.GetProduct)
+	}
+
+	log.Println("Starting server on :8080")
+	if err := r.Run(":8080"); err != nil {
+		log.Fatalf("Server crashed: %v", err)
+	}
 }
