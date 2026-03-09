@@ -33,8 +33,7 @@ func NewProductController(service service.ProductService) *ProductController {
 // @Router       /api/v1/products/ [post]
 func (h *ProductController) CreateProduct(c *gin.Context) {
 	var input dto.CreateProductInput
-	tenantParam := c.GetString("tenant_id")
-	tenantID, err := uuid.Parse(tenantParam)
+	tenantID := c.MustGet(middleware.ContextTenantID).(uuid.UUID)
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		_ = c.Error(middleware.NewBadRequest("invalid request payload", err))
@@ -52,8 +51,8 @@ func (h *ProductController) CreateProduct(c *gin.Context) {
 
 func (h *ProductController) GetProduct(c *gin.Context) {
 	idParam := c.Param("id")
-	tenantParam := c.GetString("tenant_id")
-	tenantID, err := uuid.Parse(tenantParam)
+	tenantID := c.MustGet(middleware.ContextTenantID).(uuid.UUID)
+
 	productID, err := uuid.Parse(idParam)
 
 	if err != nil {

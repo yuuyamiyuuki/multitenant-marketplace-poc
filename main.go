@@ -29,19 +29,13 @@ func main() {
 	db := infrastructure.ConnectDB(cfg.DatabaseDSN)
 	infrastructure.RunMigrations(db)
 
-	reg := registry.NewRegistry(db)
-
 	r := gin.Default()
 	r.Use(middleware.ErrorHandler())
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	api := r.Group("/api/v1")
 
-	productCtrl := reg.NewProductController()
-	productCtrl.RegisterRoutes(api)
-
-	userCtrl := reg.NewUserController()
-	userCtrl.RegisterRoutes(api)
+	reg := registry.NewRegistry(db)
+	reg.RegisterAll(r.Group("/api/v1"))
 
 	log.Printf("Starting server on port %s...", cfg.ServerPort)
 	if err := r.Run(":" + cfg.ServerPort); err != nil {

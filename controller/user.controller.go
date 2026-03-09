@@ -34,7 +34,7 @@ func NewUserController(service service.UserService) *UserController {
 // @Failure      500   {object}  middleware.AppError
 // @Router       /api/v1/users/ [post]
 func (h *UserController) CreateUser(c *gin.Context) {
-	tenantID, _ := uuid.Parse(c.GetString("tenant_id"))
+	tenantID := c.MustGet(middleware.ContextTenantID).(uuid.UUID)
 
 	var input dto.CreateUserInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -68,14 +68,8 @@ func (h *UserController) CreateUser(c *gin.Context) {
 // @Failure      500      {object}  middleware.AppError
 // @Router       /api/v1/users/password [patch]
 func (h *UserController) UpdatePassword(c *gin.Context) {
-	tenantID, _ := uuid.Parse(c.GetString("tenant_id"))
-
-	userIDStr := c.GetString("user_id")
-	userID, err := uuid.Parse(userIDStr)
-	if err != nil {
-		_ = c.Error(middleware.NewUnauthorized("invalid user session", err))
-		return
-	}
+	tenantID := c.MustGet(middleware.ContextTenantID).(uuid.UUID)
+	userID := c.MustGet(middleware.ContextUserID).(uuid.UUID)
 
 	var input dto.UpdatePasswordInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -83,7 +77,7 @@ func (h *UserController) UpdatePassword(c *gin.Context) {
 		return
 	}
 
-	err = h.userService.UpdatePassword(userID, tenantID, input)
+	err := h.userService.UpdatePassword(userID, tenantID, input)
 	if err != nil {
 		_ = c.Error(err)
 		return
