@@ -1,8 +1,13 @@
-package main // Must be main for an executable command
+//go:build ignore
+
+package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"time"
 
 	"github.com/google/uuid"
 
@@ -12,6 +17,12 @@ import (
 )
 
 func main() {
+	fmt.Println("Starting postgres")
+	exec.Command("docker-compose", "up", "-d").Run()
+
+	fmt.Println("Waiting for postgres")
+	time.Sleep(3 * time.Second)
+
 	cfg := infrastructure.ConfigLoad()
 	db := infrastructure.ConnectDB(cfg.DatabaseDSN)
 	infrastructure.RunMigrations(db)
