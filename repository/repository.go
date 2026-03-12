@@ -9,6 +9,7 @@ import (
 
 type BaseRepository[T any] interface {
 	Create(entity *T) error
+	Upsert(entity *T) error
 	Update(entity *T) error
 	Delete(entity *T) error
 	FindByID(id uuid.UUID) (*T, error)
@@ -25,6 +26,10 @@ func NewBaseRepository[T any](db *gorm.DB) BaseRepository[T] {
 
 func (repo *baseRepository[T]) Create(entity *T) error {
 	return repo.db.Create(entity).Error
+}
+
+func (repo *baseRepository[T]) Upsert(entity *T) error {
+	return repo.db.Save(entity).Error
 }
 
 func (repo *baseRepository[T]) Update(entity *T) error {

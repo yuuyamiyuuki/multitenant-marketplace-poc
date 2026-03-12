@@ -38,6 +38,8 @@ type Client struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Sales     []Sale
+	UserId    uuid.UUID
+	User      User
 }
 
 type Product struct {
@@ -50,6 +52,17 @@ type Product struct {
 	Tenant    Tenant
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+type Cart struct {
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
+	TenantID  uuid.UUID
+	Tenant    Tenant
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Products  []uuid.UUID
+	UserID    uuid.UUID
+	User      User
 }
 
 type Sale struct {
