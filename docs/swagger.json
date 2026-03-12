@@ -335,10 +335,10 @@
                 "phone": {
                     "type": "string"
                 },
-                "sales": {
+                "orders": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/repository.Sale"
+                        "$ref": "#/definitions/repository.Order"
                     }
                 },
                 "updatedAt": {
@@ -379,7 +379,7 @@
                 }
             }
         },
-        "repository.Sale": {
+        "repository.Order": {
             "type": "object",
             "properties": {
                 "client": {
@@ -403,7 +403,7 @@
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/repository.SaleItem"
+                        "$ref": "#/definitions/repository.OrderItem"
                     }
                 },
                 "tenant": {
@@ -421,7 +421,7 @@
                 }
             }
         },
-        "repository.SaleItem": {
+        "repository.OrderItem": {
             "type": "object",
             "properties": {
                 "amount": {
@@ -440,10 +440,10 @@
                 "quantity": {
                     "type": "integer"
                 },
-                "sale": {
-                    "$ref": "#/definitions/repository.Sale"
+                "order": {
+                    "$ref": "#/definitions/repository.Order"
                 },
-                "saleID": {
+                "orderID": {
                     "type": "string"
                 }
             }
@@ -463,10 +463,10 @@
                 "name": {
                     "type": "string"
                 },
-                "sales": {
+                "orders": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/repository.Sale"
+                        "$ref": "#/definitions/repository.Order"
                     }
                 },
                 "settings": {

@@ -16,8 +16,10 @@ func RunMigrations(db *gorm.DB) {
 		&repository.User{},
 		&repository.Client{},
 		&repository.Product{},
-		&repository.Sale{},
-		&repository.SaleItem{},
+		&repository.Order{},
+		&repository.OrderItem{},
+		&repository.Cart{},
+		&repository.CartItem{},
 	)
 
 	if err != nil {

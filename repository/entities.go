@@ -15,7 +15,7 @@ type Tenant struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Users     []User
-	Sales     []Sale
+	Orders    []Order
 }
 
 type User struct {
@@ -37,7 +37,7 @@ type Client struct {
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Sales     []Sale
+	Orders    []Order
 	UserId    uuid.UUID
 	User      User
 }
@@ -54,37 +54,48 @@ type Product struct {
 	UpdatedAt time.Time
 }
 
+type CartItem struct {
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
+	CartID    uuid.UUID
+	Cart      Cart
+	ProductID uuid.UUID
+	Product   Product
+	Quantity  int
+}
+
 type Cart struct {
 	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	TenantID  uuid.UUID
 	Tenant    Tenant
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Products  []uuid.UUID
+	Items     []CartItem `gorm:"foreignKey:CartID"`
 	UserID    uuid.UUID
 	User      User
 }
 
-type Sale struct {
-	ID          uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
-	Date        time.Time
-	TotalAmount float64
-	Details     datatypes.JSON `json:"details" swaggertype:"object"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	TenantID    uuid.UUID
-	Tenant      Tenant
-	ClientID    uuid.UUID
-	Client      Client
-	Items       []SaleItem `gorm:"foreignKey:SaleID"`
+type Order struct {
+	ID            uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
+	Date          time.Time
+	TotalAmount   float64
+	PaymentMethod string
+	Status        string
+	Details       datatypes.JSON `json:"details" swaggertype:"object"`
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	TenantID      uuid.UUID
+	Tenant        Tenant
+	ClientID      uuid.UUID
+	Client        Client
+	Items         []OrderItem `gorm:"foreignKey:OrderID"`
 }
 
-type SaleItem struct {
+type OrderItem struct {
 	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primarykey"`
 	Quantity  int
 	Amount    float64
-	SaleID    uuid.UUID
-	Sale      Sale
+	OrderID   uuid.UUID
+	Order     Order
 	ProductID uuid.UUID
 	Product   Product
 }

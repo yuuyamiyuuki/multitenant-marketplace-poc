@@ -341,10 +341,10 @@ const docTemplate = `{
                 "phone": {
                     "type": "string"
                 },
-                "sales": {
+                "orders": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/repository.Sale"
+                        "$ref": "#/definitions/repository.Order"
                     }
                 },
                 "updatedAt": {
@@ -385,7 +385,7 @@ const docTemplate = `{
                 }
             }
         },
-        "repository.Sale": {
+        "repository.Order": {
             "type": "object",
             "properties": {
                 "client": {
@@ -409,7 +409,7 @@ const docTemplate = `{
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/repository.SaleItem"
+                        "$ref": "#/definitions/repository.OrderItem"
                     }
                 },
                 "tenant": {
@@ -427,7 +427,7 @@ const docTemplate = `{
                 }
             }
         },
-        "repository.SaleItem": {
+        "repository.OrderItem": {
             "type": "object",
             "properties": {
                 "amount": {
@@ -446,10 +446,10 @@ const docTemplate = `{
                 "quantity": {
                     "type": "integer"
                 },
-                "sale": {
-                    "$ref": "#/definitions/repository.Sale"
+                "order": {
+                    "$ref": "#/definitions/repository.Order"
                 },
-                "saleID": {
+                "orderID": {
                     "type": "string"
                 }
             }
@@ -469,10 +469,10 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "sales": {
+                "orders": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/repository.Sale"
+                        "$ref": "#/definitions/repository.Order"
                     }
                 },
                 "settings": {

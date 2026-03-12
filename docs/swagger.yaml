@@ -74,9 +74,9 @@ definitions:
         type: string
       phone:
         type: string
-      sales:
+      orders:
         items:
-          $ref: '#/definitions/repository.Sale'
+          $ref: '#/definitions/repository.Order'
         type: array
       updatedAt:
         type: string
@@ -103,7 +103,7 @@ definitions:
       updatedAt:
         type: string
     type: object
-  repository.Sale:
+  repository.Order:
     properties:
       client:
         $ref: '#/definitions/repository.Client'
@@ -119,7 +119,7 @@ definitions:
         type: string
       items:
         items:
-          $ref: '#/definitions/repository.SaleItem'
+          $ref: '#/definitions/repository.OrderItem'
         type: array
       tenant:
         $ref: '#/definitions/repository.Tenant'
@@ -131,7 +131,7 @@ definitions:
       updatedAt:
         type: string
     type: object
-  repository.SaleItem:
+  repository.OrderItem:
     properties:
       amount:
         format: float64
@@ -144,9 +144,9 @@ definitions:
         type: string
       quantity:
         type: integer
-      sale:
-        $ref: '#/definitions/repository.Sale'
-      saleID:
+      order:
+        $ref: '#/definitions/repository.Order'
+      orderID:
         type: string
     type: object
   repository.Tenant:
@@ -159,9 +159,9 @@ definitions:
         type: string
       name:
         type: string
-      sales:
+      orders:
         items:
-          $ref: '#/definitions/repository.Sale'
+          $ref: '#/definitions/repository.Order'
         type: array
       settings:
         type: object

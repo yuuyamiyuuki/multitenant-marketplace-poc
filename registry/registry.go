@@ -25,6 +25,8 @@ func (r *Registry) RegisterAll(router *gin.RouterGroup) {
 	controllers := []Controller{
 		r.NewUserController(),
 		r.NewProductController(),
+		r.NewCartController(),
+		r.NewOrderController(),
 	}
 
 	for _, ctrl := range controllers {
@@ -42,4 +44,18 @@ func (r *Registry) NewUserController() *controller.UserController {
 	repo := repository.NewUserRepository(r.db)
 	svc := service.NewUserService(repo)
 	return controller.NewUserController(svc)
+}
+
+func (r *Registry) NewCartController() *controller.CartController {
+	cartRepo := repository.NewCartRepository(r.db)
+	productRepo := repository.NewProductRepository(r.db)
+	productSvc := service.NewProductService(productRepo)
+	svc := service.NewCartService(cartRepo, productSvc)
+	return controller.NewCartController(svc)
+}
+
+func (r *Registry) NewOrderController() *controller.OrderController {
+	uow := repository.NewUnitOfWork(r.db)
+	svc := service.NewOrderService(uow)
+	return controller.NewOrderController(svc)
 }

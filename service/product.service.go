@@ -11,6 +11,7 @@ import (
 type ProductService interface {
 	CreateProduct(input dto.CreateProductInput, tenantID uuid.UUID) (*repository.Product, error)
 	GetProduct(id uuid.UUID, tenantID uuid.UUID) (*repository.Product, error)
+	GetProductsByIDs(ids []uuid.UUID, tenantID uuid.UUID) ([]*repository.Product, error)
 }
 
 type productService struct {
@@ -51,4 +52,12 @@ func (s *productService) GetProduct(id uuid.UUID, tenantID uuid.UUID) (*reposito
 	}
 
 	return product, nil
+}
+
+func (s *productService) GetProductsByIDs(ids []uuid.UUID, tenantID uuid.UUID) ([]*repository.Product, error) {
+	products, err := s.productRepo.FindByIDListAndTenant(ids, tenantID)
+	if err != nil {
+		return nil, middleware.NewInternal("failed to fetch products from database", err)
+	}
+	return products, nil
 }
